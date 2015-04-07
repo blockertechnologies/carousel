@@ -1,3 +1,6 @@
+/**
+ * Does a fast shuffle on array, returning the shuffled version
+ */
 function fyShuffle (array) {
   var m = array.length;
   var t;
@@ -14,6 +17,10 @@ function fyShuffle (array) {
   return array;
 }
 
+/**
+ * Converts the class attr to an array, removes 'active', and returns
+ * a new className value.
+ */
 function removeActiveClass (class_string) {
   var classes = class_string.split(' ');
   var index   = classes.indexOf('active');
@@ -22,15 +29,16 @@ function removeActiveClass (class_string) {
     classes.splice(index, 1);
   }
 
-  return classes;
+  return classes.join(' ');
 }
 
-if (! Element.prototype.prependChild) {
-  Element.prototype.prependChild = function (child) {
-    this.insertBefore(child, this.firstChild);
-  };
-}
-
+/**
+ * The Carousel class.
+ *
+ * @param Array items, the JSON array of quotes
+ * @param Element element, the DOM element where the carousel will go
+ * @param Object options, options to pass for configuration
+ */
 function Carousel (items, element, options) {
   options = options || {};
   items   = items || [];
@@ -44,6 +52,9 @@ function Carousel (items, element, options) {
   this.initialize();
 }
 
+/**
+ * Called internally on instantiation
+ */
 Carousel.prototype.initialize = function () {
   var first   = null;
   var last    = null;
@@ -83,20 +94,29 @@ Carousel.prototype.initialize = function () {
   this.show(item);
 };
 
+/**
+ * Called internally, adds the 'active' class
+ */
 Carousel.prototype.show = function (item) {
-  this.hide(item);
+  var class_name = removeActiveClass(item._el.className);
 
-  item._el.className = [item._el.className, 'active'].join(' ');
+  item._el.className = [class_name, 'active'].join(' ');
 };
 
+/**
+ * Called internally, removes the 'active' class
+ */
 Carousel.prototype.hide = function (item) {
-  var classes = [];
+  var class_name = removeActiveClass(item._el.className);
 
-  classes = removeActiveClass(item._el.className);
-
-  item._el.className = classes.join(' ');
+  item._el.className = class_name;
 }
 
+/**
+ * This is called to actually initiate a scroll in either direction,
+ * number should be positive for a forward "scroll" or negative for a
+ * reverse scroll.
+ */
 Carousel.prototype.scroll = function (dir) {
   var next = null;
 
